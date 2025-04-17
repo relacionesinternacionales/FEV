@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/FEV.iml" filepath="$PROJECT_DIR$/FEV.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fevfrontend/fevfrontend.iml" filepath="$PROJECT_DIR$/fevfrontend/fevfrontend.iml" />
+    </modules>
+  </component>
+</project>

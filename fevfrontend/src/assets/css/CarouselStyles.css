@@ -1,0 +1,126 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+/* Estilos para el contenedor principal */
+.carousel-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Contenedor de la parte visual del carrusel */
+.carousel-media-container {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    height: fit-content;
+    overflow: hidden;
+    padding: 10px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Mejoras para los botones de control */
+.carousel-control-prev,
+.carousel-control-next {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+}
+
+/* Contenedor de texto */
+.content-section {
+    text-align: center;
+    padding: 20px 10px;
+    min-height: 200px; /* Para que tenga altura consistente */
+}
+
+.carousel {
+    flex-grow: 1;
+    overflow: hidden;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: fit-content;
+}
+
+/* Contenedor principal del carrusel */
+.carousel-inner {
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+
+    position: relative;
+    overflow: hidden !important; /* Lo cambiamos a hidden para evitar desbordamientos */
+    width: fit-content;
+
+    padding: 10px;
+}
+
+/* Configuración básica de los elementos del carrusel */
+.carousel-item {
+    position: relative; /* Cambiamos de absolute a relative */
+    transition: transform 0.5s ease;
+    display: none; /* Bootstrap se encarga de mostrar/ocultar */
+}
+
+.carousel-item.active {
+    display: block; /* Bootstrap maneja esto */
+    z-index: 10;
+}
+
+/* Estilos para las imágenes */
+.carousel-item img {
+    transition: transform 0.5s ease;
+    max-height: 400px;
+    border-radius: 10px;
+}
+
+.carousel-indicators button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #ccc;
+    opacity: 0.5;
+    margin: 0 5px;
+    border: none;
+}
+
+.carousel-indicators button.active {
+    background-color: #dc3545;
+    opacity: 1;
+}
+
+/* Centramos correctamente los controles */
+.carousel-control-prev,
+.carousel-control-next {
+    opacity: 0.8;
+    width: auto;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+/* Mejoramos los iconos de control */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    padding: 10px;
+}
+
+/* Hover para los controles */
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    opacity: 1;
+}
+
+/* Contenedor de contenido */
+.content-container {
+    padding: 20px;
+    text-align: center;
+}
