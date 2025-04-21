@@ -102,14 +102,12 @@ public class Service implements UserDetailsService {
         empresaExistente.setNombre(empresaActualizada.getNombre());
         empresaExistente.setDescripcion(empresaActualizada.getDescripcion());
         empresaExistente.setCorreo(empresaActualizada.getCorreo());
-        empresaExistente.setCorreoPostulantes(empresaActualizada.getCorreoPostulantes());
         empresaExistente.setCodigoPais1(empresaActualizada.getCodigoPais1());
         empresaExistente.setCodigoPais2(empresaActualizada.getCodigoPais2());
         empresaExistente.setTelefono1(empresaActualizada.getTelefono1());
         empresaExistente.setTelefono2(empresaActualizada.getTelefono2());
-        empresaExistente.setWhatsapp(empresaActualizada.getWhatsapp());
         empresaExistente.setWeb(empresaActualizada.getWeb());
-        empresaExistente.setLogo(empresaActualizada.getLogo());
+        empresaExistente.setImagen(empresaActualizada.getImagen());
 
         return empresaRepository.save(empresaExistente);
     }

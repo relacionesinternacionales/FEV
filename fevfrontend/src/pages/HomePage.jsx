@@ -7,11 +7,14 @@ import LoginModal from "../components/LoginModal.jsx";
 import {useAuth} from '../context/AuthContext';
 import {useNavigate} from 'react-router-dom';
 import ToastMessageLogOut from "../components/ToastMessageLogOut.jsx";
+import ToastMessage from "../components/ToastMessage.jsx";
+import {useToast} from "../components/useToast.jsx";
 
 export const HomePage = () => {
     const [showLoginModal, setShowLoginModal] = useState(false);
     const {isAuthenticated} = useAuth();
     const navigate = useNavigate();
+    const {toast, closeToast} = useToast();
 
     const handleButtonClick = (url) => {
         // Comprobar si la URL es externa (comienza con http:// o https://)
@@ -75,6 +78,13 @@ export const HomePage = () => {
                     handleClose={() => setShowLoginModal(false)}
                 />
             </div>
+
+            <ToastMessage
+                show={toast.show}
+                message={toast.message}
+                type={toast.type}
+                onClose={closeToast}
+            />
         </>
     );
 };

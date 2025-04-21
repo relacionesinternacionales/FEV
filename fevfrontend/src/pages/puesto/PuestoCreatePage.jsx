@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import PuestoService from "../../services/PuestoService.jsx";
 import Editor from "../../components/Editor.jsx";
-import ImagenPuesto from "../../components/ImagenPuesto.jsx";
+import Imagen from "../../components/Imagen.jsx";
 import ToastMessage from "../../components/ToastMessage.jsx";
 import {useToast} from "../../components/useToast.jsx";
 
@@ -176,7 +176,7 @@ export const PuestoCreatePage = ({ mode }) => {
                         setImagen(response.data.imagen);
                     } else {
                         // Para imágenes existentes, solo guardamos un indicador
-                        // El componente ImagenPuesto se encargará de cargar la imagen correcta
+                        // El componente Imagen se encargará de cargar la imagen correcta
                         setImagen('exist');
                     }
                     setImagenTipo(response.data.imagenTipo);
@@ -280,7 +280,7 @@ export const PuestoCreatePage = ({ mode }) => {
                                                     <div className="mt-2 w-100 h-100">
                                                         {/* Aquí usamos nuestro nuevo componente */}
                                                         {(imagen || id) && (
-                                                            <ImagenPuesto
+                                                            <Imagen
                                                                 puestoId={id}
                                                                 imagen={imagen}
                                                                 className="img-thumbnail"
@@ -329,7 +329,7 @@ export const PuestoCreatePage = ({ mode }) => {
                 show={toast.show}
                 message={toast.message}
                 type={toast.type}
-                onClose={() => setToast({...toast, show: false})}
+                onClose={closeToast}
             />
         </>
     )

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import PuestoService from "../services/PuestoService.jsx";
 
-function ImagenPuesto({ puestoId, imagen, className, style }) {
+function Imagen({ puestoId, imagen, className, style }) {
     const [imagenUrl, setImagenUrl] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -65,7 +65,7 @@ function ImagenPuesto({ puestoId, imagen, className, style }) {
     return imagenUrl ? (
         <img
             src={!error ? imagenUrl : "/placeholder-image.png"}
-            alt="Imagen del puesto"
+            alt="Imagen/Logo"
             className={className || "img-thumbnail"}
             style={style || { maxHeight: '200px' }}
             onError={() => {
@@ -78,4 +78,4 @@ function ImagenPuesto({ puestoId, imagen, className, style }) {
     );
 }
 
-export default ImagenPuesto;
+export default Imagen;

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import '/src/css/style.css';
 import {useNavigate} from 'react-router-dom';
 import PuestoService from "../../services/PuestoService.jsx";
@@ -75,13 +76,13 @@ export const PuestoListPage = () => {
             <div className={"table-puestos"}>
                 <br/>
                 <h1>Puestos</h1>
-                <button className="btn btn-primary mb-1 float-end" onClick={addPuesto}>Nuevo Puesto</button>
+                <button className="btn btn-primary mb-1 float-end fw-bold" onClick={addPuesto}><i className="bi bi-plus-circle-fill me-2"></i>Nuevo Puesto</button>
                 <table className={"table table-striped"}>
                     <thead>
                     <tr className={"text-center d-flex"}>
                         <th style={{flex: 1.0}} className={"px-3"}>Nombre</th>
                         <th style={{flex: 0.2}} className={""}>Estado</th>
-                        <th style={{flex: 0.3}} className={""}>Opciones</th>
+                        <th style={{flex: 0.5}} className={""}>Opciones</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -90,15 +91,16 @@ export const PuestoListPage = () => {
                             <td style={{flex: 1}}
                                 className={"text-start px-3 align-items-center align-content-center"}>{puesto.nombre}</td>
                             <td style={{flex: 0.2}} className={"align-content-center"}>{puesto.estado}</td>
-                            <td style={{flex: 0.3}} className={"align-content-center"}>
+                            <td style={{flex: 0.5}} className={"align-content-center"}>
                                 <div className={"text-center"}>
-                                    <button className="btn btn-warning m-1"
-                                            onClick={() => editPuesto(puesto.id)}>Editar
+                                    <button className="btn btn-warning m-1 fw-bold"
+                                            onClick={() => editPuesto(puesto.id)}><i className="bi bi-pen-fill me-2"></i>Editar
                                     </button>
-                                    <button className="btn btn-info m-1" onClick={() => viewPuesto(puesto.id)}>Ver
+                                    <button className="btn btn-info m-1 fw-bold" onClick={() => viewPuesto(puesto.id)}>
+                                        <i className="bi bi-eye-fill me-2"></i>Ver
                                     </button>
-                                    <button className="btn btn-danger m-1"
-                                            onClick={() => removePuesto(puesto.id)}>Eliminar
+                                    <button className="btn btn-danger m-1 fw-bold"
+                                            onClick={() => removePuesto(puesto.id)}><i className="bi bi-trash-fill me-2"></i>Eliminar
                                     </button>
                                 </div>
                             </td>

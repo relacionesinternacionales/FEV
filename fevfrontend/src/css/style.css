@@ -27,10 +27,49 @@ header {
     align-items: center;
     width: 100%;
     max-height: 100px;
-    overflow: hidden;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px 25px;
 }
+
+/* Estilos para solucionar el problema del dropdown en el header */
+.header-dropdown {
+    overflow: visible !important;
+}
+
+/* Estilos adicionales para mejorar la apariencia del menú */
+.dropdown-toggle {
+    background-color: var(--color1);
+    border-color: var(--color1);
+    color: #ffffff;
+}
+
+.dropdown-toggle:hover,
+.dropdown-toggle:focus {
+    background-color: var(--color2);
+    border-color: #004080;
+    color: black;
+}
+
+.dropdown-item {
+    color: #333;
+}
+
+.dropdown-item:hover {
+    font-weight: bold;
+    background-color: #f0f0f0;
+}
+
+.logout {
+    color: var(--color4);
+}
+
+.logout:hover {
+    font-weight: bold;
+    color: var(--color4);
+}
+
+/*
+Footer
+ */
 
 footer {
     bottom: 0;
