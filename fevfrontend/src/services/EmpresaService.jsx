@@ -23,6 +23,16 @@ class EmpresaService {
         }
     }
 
+    async getEmpresaImage(id)
+    {
+        return axios({
+            url: `${EMPRESA_BASE_REST_API_URL}/${id}/imagen`,
+            method: 'GET',
+            responseType: 'blob',
+            headers: {}
+        });
+    }
+
 }
 
 export default new EmpresaService();

@@ -1,11 +1,43 @@
 import React, {useEffect, useState} from "react";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import Editor from "../../components/Editor.jsx";
 import Imagen from "../../components/Imagen.jsx";
 import ToastMessage from "../../components/ToastMessage.jsx";
 import {useToast} from "../../components/useToast.jsx";
 import EmpresaService from "../../services/EmpresaService.jsx";
+
 export const EmpresaCreatePage = ({mode}) => {
+
+    const codigosPais = [
+        {codigo: "+1", pais: "Estados Unidos/Canadá"},
+        {codigo: "+34", pais: "España"},
+        {codigo: "+52", pais: "México"},
+        {codigo: "+54", pais: "Argentina"},
+        {codigo: "+56", pais: "Chile"},
+        {codigo: "+57", pais: "Colombia"},
+        {codigo: "+502", pais: "Guatemala"},
+        {codigo: "+503", pais: "El Salvador"},
+        {codigo: "+504", pais: "Honduras"},
+        {codigo: "+505", pais: "Nicaragua"},
+        {codigo: "+506", pais: "Costa Rica"},
+        {codigo: "+507", pais: "Panamá"},
+        {codigo: "+593", pais: "Ecuador"},
+        {codigo: "+598", pais: "Uruguay"},
+        {codigo: "+51", pais: "Perú"},
+        {codigo: "+58", pais: "Venezuela"},
+        {codigo: "+55", pais: "Brasil"},
+        {codigo: "+591", pais: "Bolivia"},
+        {codigo: "+595", pais: "Paraguay"},
+        {codigo: "+53", pais: "Cuba"},
+        {codigo: "+809", pais: "República Dominicana"},
+        {codigo: "+49", pais: "Alemania"},
+        {codigo: "+33", pais: "Francia"},
+        {codigo: "+44", pais: "Reino Unido"},
+        {codigo: "+39", pais: "Italia"},
+        {codigo: "+351", pais: "Portugal"},
+        {codigo: "+31", pais: "Países Bajos"},
+    ];
+
     //------------------------------------------------------------------------------------------------------------------
     // Variables
     //------------------------------------------------------------------------------------------------------------------
@@ -152,6 +184,24 @@ export const EmpresaCreatePage = ({mode}) => {
             errorsCopy.descripcion = "";
         }
 
+        // Validar teléfono 1 (si tiene código de país, debe tener número)
+        if (codigoPais1 && !telefono1) {
+            errorsCopy.telefono1 = "Si selecciona un código de país, debe ingresar un número";
+            valid = false;
+        } else {
+            errorsCopy.telefono1 = "";
+        }
+
+        // Validar teléfono 2 (si tiene código de país, debe tener número)
+        if (codigoPais2 && !telefono2) {
+            errorsCopy.telefono2 = "Si selecciona un código de país, debe ingresar un número";
+            valid = false;
+        } else {
+            errorsCopy.telefono2 = "";
+        }
+
+
+
         setErrors(errorsCopy);
         return valid;
     }
@@ -281,8 +331,7 @@ export const EmpresaCreatePage = ({mode}) => {
         navigate(`/empresa/edit/${empresaId}`);
     }
 
-    function cleanInputs()
-    {
+    function cleanInputs() {
         setCedula('')
         setNombre('')
         setDescripcion('')
@@ -378,7 +427,8 @@ export const EmpresaCreatePage = ({mode}) => {
                                                 <h5 className="m-0">Información Principal</h5>
                                             </div>
                                             <div className="card-body d-flex flex-column justify-content-evenly">
-                                                {/* Cedula del puesto - MODIFICADO */}
+
+                                                {/* Cedula de la empresa */}
                                                 <div className="mb-3 d-flex flex-column">
                                                     <label className="form-label text-start fw-bold">Cédula</label>
                                                     <input
@@ -395,7 +445,7 @@ export const EmpresaCreatePage = ({mode}) => {
                                                         <div className={"invalid-feedback"}>{errors.cedula}</div>}
                                                 </div>
 
-                                                {/* Nombre del puesto */}
+                                                {/* Nombre de la empresa */}
                                                 <div className="mb-3 d-flex flex-column">
                                                     <label className="form-label text-start fw-bold">Nombre</label>
                                                     <input
@@ -409,6 +459,93 @@ export const EmpresaCreatePage = ({mode}) => {
                                                     />
                                                     {errors.nombre &&
                                                         <div className={"invalid-feedback"}>{errors.nombre}</div>}
+                                                </div>
+
+                                                {/* Email de la empresa */}
+                                                <div className="mb-3 d-flex flex-column">
+                                                    <label className="form-label text-start fw-bold">Email</label>
+                                                    <input
+                                                        disabled={isDisabled || isLoading}
+                                                        type="text"
+                                                        placeholder="Digite el email de la empresa"
+                                                        name="email"
+                                                        className={`form-control ${errors.correo ? 'is-invalid' : ''}`}
+                                                        value={correo}
+                                                        onChange={(e) => setCorreo(e.target.value)}
+                                                    />
+                                                    {errors.correo &&
+                                                        <div className={"invalid-feedback"}>{errors.correo}</div>}
+                                                </div>
+
+                                                {/* Teléfonos */}
+                                                <div className={"mb-3 d-flex flex-row"}>
+                                                    {/* Telefono 1 */}
+                                                    <div className="me-1 d-flex flex-column">
+                                                        <label
+                                                            className="form-label text-start fw-bold">Teléfono</label>
+                                                        <div className="d-flex">
+                                                            <select
+                                                                disabled={isDisabled || isLoading}
+                                                                className="form-select me-2"
+                                                                style={{width: "30%"}}
+                                                                value={codigoPais1}
+                                                                onChange={(e) => setCodigoPais1(e.target.value)}
+                                                            >
+                                                                <option value="">Seleccione código</option>
+                                                                {codigosPais.map((pais) => (
+                                                                    <option key={pais.codigo} value={pais.codigo}>
+                                                                        {pais.codigo}
+                                                                    </option>
+                                                                ))}
+                                                            </select>
+                                                            <input
+                                                                disabled={isDisabled || isLoading}
+                                                                type="tel"
+                                                                placeholder="Número de teléfono"
+                                                                name="telefono1"
+                                                                className={`form-control ${errors.telefono1 ? 'is-invalid' : ''}`}
+                                                                value={telefono1}
+                                                                onChange={(e) => setTelefono1(e.target.value)}
+                                                            />
+                                                        </div>
+                                                        {errors.telefono1 &&
+                                                            <div
+                                                                className="text-danger small mt-1">{errors.telefono1}</div>}
+                                                    </div>
+
+                                                    {/* Teléfono 2 */}
+                                                    <div className="ms-1 d-flex flex-column">
+                                                        <label
+                                                            className="form-label text-start fw-bold">Teléfono</label>
+                                                        <div className="d-flex">
+                                                            <select
+                                                                disabled={isDisabled || isLoading}
+                                                                className="form-select me-2"
+                                                                style={{width: "30%"}}
+                                                                value={codigoPais2}
+                                                                onChange={(e) => setCodigoPais2(e.target.value)}
+                                                            >
+                                                                <option value="">Seleccione código</option>
+                                                                {codigosPais.map((pais) => (
+                                                                    <option key={pais.codigo} value={pais.codigo}>
+                                                                        {pais.codigo}
+                                                                    </option>
+                                                                ))}
+                                                            </select>
+                                                            <input
+                                                                disabled={isDisabled || isLoading}
+                                                                type="tel"
+                                                                placeholder="Número de teléfono (opcional)"
+                                                                name="telefono2"
+                                                                className={`form-control ${errors.telefono2 ? 'is-invalid' : ''}`}
+                                                                value={telefono2}
+                                                                onChange={(e) => setTelefono2(e.target.value)}
+                                                            />
+                                                        </div>
+                                                        {errors.telefono2 &&
+                                                            <div
+                                                                className="text-danger small mt-1">{errors.telefono2}</div>}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -436,10 +573,11 @@ export const EmpresaCreatePage = ({mode}) => {
                                                     <div className="mt-2 w-100 h-100">
                                                         {(imagen || id) && (
                                                             <Imagen
-                                                                puestoId={id}
+                                                                entidadId={id}
                                                                 imagen={imagen}
                                                                 className="img-thumbnail"
                                                                 style={{maxHeight: '200px'}}
+                                                                tipoEntidad="empresa"
                                                             />
                                                         )}
                                                     </div>
@@ -486,7 +624,7 @@ export const EmpresaCreatePage = ({mode}) => {
 
                                 {/* Botones de acción */}
                                 <div className={"mt-3 p-1 d-flex flex-row justify-content-center"}>
-                                        <button className='btn btn-secondary mx-2' onClick={volver}>Volver</button>
+                                    <button className='btn btn-secondary mx-2' onClick={volver}>Volver</button>
                                     {mostrarBotonGuardar()}
                                 </div>
                             </form>

@@ -26,6 +26,6 @@ public class EmpresaDTO {
     private String telefono1;
     private String telefono2;
     private String web;
-    private byte[] imagen;
+    private String imagen;
     private String imagenTipo;
 }

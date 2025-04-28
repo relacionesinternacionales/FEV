@@ -278,13 +278,13 @@ export const PuestoCreatePage = ({ mode }) => {
                                                         />
                                                     )}
                                                     <div className="mt-2 w-100 h-100">
-                                                        {/* Aquí usamos nuestro nuevo componente */}
                                                         {(imagen || id) && (
                                                             <Imagen
-                                                                puestoId={id}
+                                                                entidadId={id}
                                                                 imagen={imagen}
                                                                 className="img-thumbnail"
                                                                 style={{ maxHeight: '200px' }}
+                                                                tipoEntidad="puesto"
                                                             />
                                                         )}
                                                     </div>
