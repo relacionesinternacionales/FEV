@@ -1,6 +1,5 @@
 package com.example.fevbackend.Logic.DTOs;
 
-import com.example.fevbackend.Logic.Model.Empresa;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

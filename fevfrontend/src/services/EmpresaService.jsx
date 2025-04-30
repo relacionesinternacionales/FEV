@@ -33,6 +33,8 @@ class EmpresaService {
         });
     }
 
+    async createEmpresa(empresa) { return axios.post(`${EMPRESA_BASE_REST_API_URL}`, empresa)}
+
 }
 
 export default new EmpresaService();

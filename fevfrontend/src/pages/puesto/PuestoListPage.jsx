@@ -20,6 +20,7 @@ export const PuestoListPage = () => {
     const {toast, closeToast} = useToast();
 
     const [puestos, setPuestos] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     //------------------------------------------------------------------------------------------------------------------
     // Metos
     //------------------------------------------------------------------------------------------------------------------
@@ -38,18 +39,17 @@ export const PuestoListPage = () => {
     function removePuesto(id) {
         console.log("Eliminar puesto con id: ", id);
 
-        alert("Eliminar el puesto");
-
-        PuestoService.deletePuesto(id).then(() => {
-            PuestoService.getPuestosByEmpresaId(empresaId).then((response) => {
-                setPuestos(response);
+        if(confirm("¿Está seguro que desea eliminar este puesto?")) {
+            PuestoService.deletePuesto(id).then(() => {
+                PuestoService.getPuestosByEmpresaId(empresaId).then((response) => {
+                    setPuestos(response);
+                }).catch((error) => {
+                    console.log(error);
+                });
             }).catch((error) => {
                 console.log(error);
             });
-        }).catch((error) => {
-            console.log(error);
-        });
-
+        }
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -61,8 +61,10 @@ export const PuestoListPage = () => {
         PuestoService.getPuestosByEmpresaId(empresaId).then(response => {
             setPuestos(response);
             console.log("Lista Puestos", response.data);
+            setIsLoading(false);
         }).catch(error => {
             console.log(error);
+            setIsLoading(false);
         })
     }, [])
 
@@ -76,7 +78,10 @@ export const PuestoListPage = () => {
             <div className={"table-puestos"}>
                 <br/>
                 <h1>Puestos</h1>
-                <button className="btn btn-primary mb-1 float-end fw-bold" onClick={addPuesto}><i className="bi bi-plus-circle-fill me-2"></i>Nuevo Puesto</button>
+                <button className="btn btn-primary mb-1 float-end fw-bold" onClick={addPuesto}><i
+                    className="bi bi-plus-circle-fill me-2"></i>Nuevo Puesto
+                </button>
+
                 <table className={"table table-striped"}>
                     <thead>
                     <tr className={"text-center d-flex"}>
@@ -85,29 +90,56 @@ export const PuestoListPage = () => {
                         <th style={{flex: 0.5}} className={""}>Opciones</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    {puestos.map(puesto =>
-                        <tr className={"text-center d-flex"} key={puesto.id}>
-                            <td style={{flex: 1}}
-                                className={"text-start px-3 align-items-center align-content-center"}>{puesto.nombre}</td>
-                            <td style={{flex: 0.2}} className={"align-content-center"}>{puesto.estado}</td>
-                            <td style={{flex: 0.5}} className={"align-content-center"}>
-                                <div className={"text-center"}>
-                                    <button className="btn btn-warning m-1 fw-bold"
-                                            onClick={() => editPuesto(puesto.id)}><i className="bi bi-pen-fill me-2"></i>Editar
-                                    </button>
-                                    <button className="btn btn-info m-1 fw-bold" onClick={() => viewPuesto(puesto.id)}>
-                                        <i className="bi bi-eye-fill me-2"></i>Ver
-                                    </button>
-                                    <button className="btn btn-danger m-1 fw-bold"
-                                            onClick={() => removePuesto(puesto.id)}><i className="bi bi-trash-fill me-2"></i>Eliminar
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    )
-                    }
-                    </tbody>
+                    {isLoading ? (
+                        <div className="text-center p-5">
+                            <div className="spinner-border" role="status">
+                                <span className="visually-hidden">Cargando...</span>
+                            </div>
+                            <p className="mt-2">Cargando puestos...</p>
+                        </div>
+                    ) : (
+                        <>
+                            {puestos && puestos.length > 0 ? (
+                                    <tbody>
+                                    {puestos.map(puesto =>
+                                        <tr className={"text-center d-flex"} key={puesto.id}>
+                                            <td style={{flex: 1}}
+                                                className={"text-start px-3 align-items-center align-content-center"}>{puesto.nombre}</td>
+                                            <td style={{flex: 0.2}} className={"align-content-center"}>{puesto.estado}</td>
+                                            <td style={{flex: 0.5}} className={"align-content-center"}>
+                                                <div className={"text-center"}>
+                                                    <button className="btn btn-warning m-1 fw-bold"
+                                                            onClick={() => editPuesto(puesto.id)}><i
+                                                        className="bi bi-pen-fill me-2"></i>Editar
+                                                    </button>
+                                                    <button className="btn btn-info m-1 fw-bold"
+                                                            onClick={() => viewPuesto(puesto.id)}>
+                                                        <i className="bi bi-eye-fill me-2"></i>Ver
+                                                    </button>
+                                                    <button className="btn btn-danger m-1 fw-bold"
+                                                            onClick={() => removePuesto(puesto.id)}><i
+                                                        className="bi bi-trash-fill me-2"></i>Eliminar
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )
+                                    }
+                                    </tbody>
+                                )
+                                :
+                                (
+                                    <div className="alert alert-info text-center mt-4">
+                                        <i className="bi bi-info-circle-fill me-2 fs-4"></i>
+                                        <p className="mb-0">No se encontraron puestos registrados para esta empresa.</p>
+                                        <p className="mb-0">Puede crear un nuevo puesto utilizando el botón "Nuevo
+                                            Puesto".</p>
+                                    </div>
+                                )
+                            }
+                        </>
+                    )}
+
                 </table>
             </div>
 

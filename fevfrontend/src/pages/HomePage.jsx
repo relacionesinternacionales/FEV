@@ -34,14 +34,6 @@ export const HomePage = () => {
 
     const carouselItems = [
         {
-            image: "/assets/images/Perfiles.png",
-            alt: "Perfiles Laborales UNA",
-            title: "Perfiles Laborales UNA",
-            description: "Accede al sistema de Perfiles Laborales de la Universidad Nacional y gestione su perfil profesional",
-            linkText1: "Visitar",
-            linkUrl1: "https://perfileslaboralesuna.com/",
-        },
-        {
             image: "/assets/images/FEV.jpeg",
             alt: "Feria Virtual de Empleo",
             title: "Feria Virtual de Empleo",
@@ -50,12 +42,20 @@ export const HomePage = () => {
             linkUrl1: "/empleos"
         },
         {
+            image: "/assets/images/Perfiles.png",
+            alt: "Perfiles Laborales UNA",
+            title: "Perfiles Laborales UNA",
+            description: "Accede al sistema de Perfiles Laborales de la Universidad Nacional y gestione su perfil profesional",
+            linkText1: "Visitar",
+            linkUrl1: "https://perfileslaboralesuna.com/",
+        },
+        {
             image: "/assets/images/Empresa.jpg",
             alt: "Empresas Ofertantes",
             title: "Empresas Ofertantes",
             description: "Ingreso al sistema de gestión para las empresas ofertantes",
             linkText1: "Registrarse",
-            linkUrl1: "/",
+            linkUrl1: "/empresa/create",
             linkText2: "Ingresar",
             linkUrl2: "/empresaHome",
         },
@@ -67,7 +67,7 @@ export const HomePage = () => {
 
     return (
         <>
-            <ToastMessageLogOut />
+            <ToastMessageLogOut/>
             <div>
                 <Carousel
                     items={carouselItems}

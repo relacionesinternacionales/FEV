@@ -63,6 +63,11 @@ export const EmpresaCreatePage = ({mode}) => {
     const [imagen, setImagen] = useState(''); // Guardaremos la imagen en Base64
     const [imagenTipo, setImagenTipo] = useState(''); // Tipo MIME de la imagen
 
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+
     // Errores
     const [errors, setErrors] = useState({
         cedula: "",
@@ -75,6 +80,8 @@ export const EmpresaCreatePage = ({mode}) => {
         telefono2: '',
         web: '',
         imagen: '',
+        password: '',
+        confirmPassword: ''
     });
 
     //------------------------------------------------------------------------------------------------------------------
@@ -200,7 +207,37 @@ export const EmpresaCreatePage = ({mode}) => {
             errorsCopy.telefono2 = "";
         }
 
+        if (!id) {
+            const passwordsValid = validarContrasenas();
+            valid = valid && passwordsValid;
+        }
 
+        setErrors(errorsCopy);
+        return valid;
+    }
+
+    const validarContrasenas = () => {
+        let valid = true;
+        const errorsCopy = {...errors};
+
+        // Validar que la contraseña no esté vacía
+        if (!password) {
+            errorsCopy.password = "La contraseña es obligatoria";
+            valid = false;
+        } else if (password.length < 6) {
+            errorsCopy.password = "La contraseña debe tener al menos 6 caracteres";
+            valid = false;
+        } else {
+            errorsCopy.password = "";
+        }
+
+        // Validar que las contraseñas coincidan
+        if (password !== confirmPassword) {
+            errorsCopy.confirmPassword = "Las contraseñas no coinciden";
+            valid = false;
+        } else {
+            errorsCopy.confirmPassword = "";
+        }
 
         setErrors(errorsCopy);
         return valid;
@@ -254,25 +291,27 @@ export const EmpresaCreatePage = ({mode}) => {
                 imagen,
                 imagenTipo
             };
-            const empresaCreateDTO = {
-                id,
-                cedula: valorCedulaParaGuardar,
-                nombre,
-                descripcion,
-                correo,
-                codigoPais1,
-                codigoPais2,
-                telefono1,
-                telefono2,
-                web,
-                imagen,
-                imagenTipo
+            const empresaUserDTO = {
+                empresa: {
+                    cedula: valorCedulaParaGuardar,
+                    nombre,
+                    descripcion,
+                    correo,
+                    codigoPais1,
+                    codigoPais2,
+                    telefono1,
+                    telefono2,
+                    web,
+                    imagen,
+                    imagenTipo
+                },
+                password: password
             };
 
-            //Actualizar puesto
+            //Actualizar Empresa
             if (id) {
                 try {
-                    const response = await EmpresaService.updateEmpresa(id, empresaDTO);
+                    const response = await EmpresaService.createEmpresa(id, empresaDTO);
                     console.log(response.data);
                     setToastForNextPage('Empresa editada correctamente');
                     navigate(`/empresa/view/${empresaId}`);
@@ -283,15 +322,14 @@ export const EmpresaCreatePage = ({mode}) => {
                 }
             }
 
-            // Crear Puesto
+            // Crear Empresa
             else {
                 try {
-                    /*
-                    const response = await PuestoService.createPuesto(empresaCreateDTO);
+                    const response = await EmpresaService.createEmpresa(empresaUserDTO);
                     console.log(response);
-                    setToastForNextPage('Puesto creado correctamente');
-                    navigate(`/empresa/view/${empresaId}`);
-                    */
+                    setToastForNextPage('Empresa creada correctamente');
+                    navigate(`/home`);
+
                 } catch (error) {
                     showToast('Hubo un error al crear la empresa: ' + error.message, 'danger');
                 } finally {
@@ -346,9 +384,11 @@ export const EmpresaCreatePage = ({mode}) => {
 
     function volver() {
         cleanInputs();
-        isEditMode
-            ? navigate(`/empresa/view/${empresaId}`)
-            : navigate(`/empresaHome`);
+        if(isEditMode) {
+
+            navigate(`/empresa/view/${empresaId}`);
+        } else if (isDisabled) {navigate(`/empresaHome`);}
+        else {navigate(`/home`)}
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -547,6 +587,63 @@ export const EmpresaCreatePage = ({mode}) => {
                                                                 className="text-danger small mt-1">{errors.telefono2}</div>}
                                                     </div>
                                                 </div>
+
+                                                {/* Contraseña */}
+                                                {!id && (
+                                                    <div className="card mt-3">
+                                                        <div className="card-header bg-light">
+                                                            <h5 className="m-0">Credenciales</h5>
+                                                        </div>
+                                                        <div className="card-body">
+                                                            {/* Campo de contraseña */}
+                                                            <div className="mb-3">
+                                                                <label className="form-label text-start fw-bold">Contraseña</label>
+                                                                <div className="input-group">
+                                                                    <input
+                                                                        disabled={isLoading}
+                                                                        type={passwordVisible ? "text" : "password"}
+                                                                        placeholder="Ingrese su contraseña"
+                                                                        className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                                                                        value={password}
+                                                                        onChange={(e) => setPassword(e.target.value)}
+                                                                    />
+                                                                    <button
+                                                                        type="button"
+                                                                        className="btn btn-outline-secondary"
+                                                                        onClick={() => setPasswordVisible(!passwordVisible)}
+                                                                    >
+                                                                        <i className={`bi ${passwordVisible ? 'bi-eye-slash' : 'bi-eye'}`}></i>
+                                                                    </button>
+                                                                    {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+                                                                </div>
+                                                                <div className="form-text">La contraseña debe tener al menos 6 caracteres</div>
+                                                            </div>
+
+                                                            {/* Campo de confirmar contraseña */}
+                                                            <div className="mb-3">
+                                                                <label className="form-label text-start fw-bold">Confirmar Contraseña</label>
+                                                                <div className="input-group">
+                                                                    <input
+                                                                        disabled={isLoading}
+                                                                        type={confirmPasswordVisible ? "text" : "password"}
+                                                                        placeholder="Confirme su contraseña"
+                                                                        className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
+                                                                        value={confirmPassword}
+                                                                        onChange={(e) => setConfirmPassword(e.target.value)}
+                                                                    />
+                                                                    <button
+                                                                        type="button"
+                                                                        className="btn btn-outline-secondary"
+                                                                        onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
+                                                                    >
+                                                                        <i className={`bi ${confirmPasswordVisible ? 'bi-eye-slash' : 'bi-eye'}`}></i>
+                                                                    </button>
+                                                                    {errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -608,7 +705,7 @@ export const EmpresaCreatePage = ({mode}) => {
                                     <div className="col-12">
                                         <div className="card">
                                             <div className="card-header bg-light">
-                                                <h5 className="mb-0">Descripción del puesto</h5>
+                                                <h5 className="mb-0">Descripción de la Empresa</h5>
                                             </div>
                                             <div className="card-body">
                                                 <Editor

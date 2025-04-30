@@ -1,9 +1,7 @@
 package com.example.fevbackend.Logic;
 
 import com.example.fevbackend.Data.Repository.*;
-import com.example.fevbackend.Logic.DTOs.EmpresaDTO;
-import com.example.fevbackend.Logic.DTOs.PuestoCreatDTO;
-import com.example.fevbackend.Logic.DTOs.PuestoDTO;
+import com.example.fevbackend.Logic.DTOs.*;
 import com.example.fevbackend.Logic.Model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -88,9 +86,44 @@ public class Service implements UserDetailsService {
     }
 
     @Transactional
-    public Empresa addEmpresa(Empresa empresa) {
+    public Empresa addEmpresa(EmpresaUserDTO empresaUserDTO) {
 
+        //Crear al usuario
+        User user = new User();
+        user.setUsername(empresaUserDTO.getEmpresa().getCorreo());
+        user.setPassword(empresaUserDTO.getPassword());
+        user.setEnable(true);
+        user.setIsAdmin(false);
 
+        //Guardar el nuevo usuario
+        user = addUser(user);
+
+        //Crear la empresa
+        Empresa empresa = new Empresa();
+        empresa.setCedula(empresaUserDTO.getEmpresa().getCedula());
+        empresa.setNombre(empresaUserDTO.getEmpresa().getNombre());
+        empresa.setDescripcion(empresaUserDTO.getEmpresa().getDescripcion());
+        empresa.setCorreo(empresaUserDTO.getEmpresa().getCorreo());
+        empresa.setCodigoPais1(empresaUserDTO.getEmpresa().getCodigoPais1());
+        empresa.setCodigoPais2(empresaUserDTO.getEmpresa().getCodigoPais2());
+        empresa.setTelefono1(empresaUserDTO.getEmpresa().getTelefono1());
+        empresa.setTelefono2(empresaUserDTO.getEmpresa().getTelefono2());
+        empresa.setWeb(empresaUserDTO.getEmpresa().getWeb());
+
+        // Convertir la imagen de base64 a byte[]
+        if (empresaUserDTO.getEmpresa().getImagen() != null && !empresaUserDTO.getEmpresa().getImagen().isEmpty()) {
+            // Si es una nueva imagen en base64 (comienza con "data:image/")
+            if (empresaUserDTO.getEmpresa().getImagen().startsWith("data:")) {
+                String base64Image = empresaUserDTO.getEmpresa().getImagen().split(",")[1];
+                empresa.setImagen(Base64.getDecoder().decode(base64Image));
+                empresa.setImagenTipo(empresaUserDTO.getEmpresa().getImagenTipo());
+            }
+        }
+
+        // Asociar Empresa con el Usuario
+        empresa.setUser(user);
+
+        // Guardar y retornar la empresa
         return empresaRepository.save(empresa);
     }
 
