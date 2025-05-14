@@ -1,12 +1,14 @@
-// hooks/useToast.jsx
 import { useState, useEffect } from 'react';
+
+
 
 export const useToast = () => {
     const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
-    // Comprobar localStorage al montar el componente
     useEffect(() => {
+
         const storedMessage = localStorage.getItem('toastMessage');
+
         if (storedMessage) {
             const messageType = localStorage.getItem('toastType') || 'success';
             setToast({ show: true, message: storedMessage, type: messageType });

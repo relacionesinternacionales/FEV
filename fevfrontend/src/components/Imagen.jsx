@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import PuestoService from "../services/PuestoService.jsx";
+import EmpresaService from "../services/EmpresaService.jsx";
 
-function ImagenPuesto({ puestoId, imagen, className, style }) {
+function Imagen({ entidadId, imagen, className, style, tipoEntidad = 'puesto' }) {
     const [imagenUrl, setImagenUrl] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
-
-    // URL base del API
-    const PUESTO_BASE_REST_API_URL = "http://localhost:8080/api/v1/puesto";
 
     useEffect(() => {
         // Limpiar la URL del objeto al desmontar el componente o antes de crear una nueva
@@ -19,7 +17,7 @@ function ImagenPuesto({ puestoId, imagen, className, style }) {
     }, [imagenUrl]);
 
     useEffect(() => {
-        // Reinicia los estados cuando cambia la imagen o el puestoId
+        // Reinicia los estados cuando cambia la imagen o el entidadId
         setError(false);
 
         // Caso 1: Si recibimos directamente una imagen en base64
@@ -30,28 +28,33 @@ function ImagenPuesto({ puestoId, imagen, className, style }) {
         else if (typeof imagen === 'string' && imagen.startsWith('http')) {
             setImagenUrl(imagen);
         }
-        // Caso 3: Si solo tenemos el ID del puesto, hacemos una solicitud directa
-        else if (puestoId) {
-            cargarImagenDesdeBlobDirecto(puestoId);
+        // Caso 3: Si solo tenemos el ID de la entidad, hacemos una solicitud directa
+        else if (entidadId) {
+            cargarImagenDesdeBlobDirecto(entidadId);
         }
         // Caso 4: No hay imagen
         else {
             setImagenUrl(null);
         }
-    }, [puestoId, imagen]);
+    }, [entidadId, imagen, tipoEntidad]);
 
     // Método que utiliza axios para obtener directamente la imagen como blob
     const cargarImagenDesdeBlobDirecto = async (id) => {
         setIsLoading(true);
         try {
-            // Realizar la solicitud para obtener la imagen como blob
-            const response = await PuestoService.getPuestoImage(id)
+            // Elegir el servicio según el tipo de entidad
+            let response;
+            if (tipoEntidad === 'puesto') {
+                response = await PuestoService.getPuestoImage(id);
+            } else if (tipoEntidad === 'empresa') {
+                response = await EmpresaService.getEmpresaImage(id);
+            }
 
             // Crear una URL para el blob
             const blobUrl = URL.createObjectURL(response.data);
             setImagenUrl(blobUrl);
         } catch (err) {
-            console.error("Error al cargar la imagen del puesto:", err);
+            console.error(`Error al cargar la imagen de ${tipoEntidad}:`, err);
             setError(true);
         } finally {
             setIsLoading(false);
@@ -65,7 +68,7 @@ function ImagenPuesto({ puestoId, imagen, className, style }) {
     return imagenUrl ? (
         <img
             src={!error ? imagenUrl : "/placeholder-image.png"}
-            alt="Imagen del puesto"
+            alt="Imagen/Logo"
             className={className || "img-thumbnail"}
             style={style || { maxHeight: '200px' }}
             onError={() => {
@@ -77,5 +80,4 @@ function ImagenPuesto({ puestoId, imagen, className, style }) {
         <div className="text-center p-3 bg-light border rounded">Sin imagen</div>
     );
 }
-
-export default ImagenPuesto;
+export default Imagen;

@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -13,6 +15,8 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name= "users")
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @Column(name = "id", nullable = false)

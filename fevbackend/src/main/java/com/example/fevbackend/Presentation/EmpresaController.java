@@ -1,13 +1,15 @@
 package com.example.fevbackend.Presentation;
 
+import com.example.fevbackend.Logic.DTOs.EmpresaCreateDTO;
+import com.example.fevbackend.Logic.DTOs.EmpresaDTO;
 import com.example.fevbackend.Logic.DTOs.EmpresaUserDTO;
 import com.example.fevbackend.Logic.Model.Empresa;
-import com.example.fevbackend.Logic.Model.User;
 import com.example.fevbackend.Logic.Service;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -68,15 +70,33 @@ public class EmpresaController {
         return service.getEmpresaIdByCorreo(username);
     }
 
+    // Endpoint para obtener imagen directamente
+    @GetMapping("/{id}/imagen")
+    public ResponseEntity<?> getImagen(@PathVariable Integer id) {
+        Empresa empresa = service.getEmpresa(id);
+
+        if (empresa == null || empresa.getImagen() == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String contentType = empresa.getImagenTipo() != null ? empresa.getImagenTipo() : "image/jpeg";
+
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(empresa.getImagen());
+    }
+
     // Add
     @PostMapping
     public ResponseEntity<?> addEmpresa(@Valid @RequestBody EmpresaUserDTO dto, BindingResult result) {
+
         // Validaciones básicas para la empresa
         if (dto.getEmpresa() == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        Empresa empresa = dto.getEmpresa();
+        EmpresaCreateDTO empresa = dto.getEmpresa();
 
         // Validar campos obligatorios
         if (empresa.getNombre() == null || empresa.getNombre().trim().isEmpty()) {
@@ -89,19 +109,7 @@ public class EmpresaController {
         }
 
         try {
-            // Crear el usuario asociado
-            User user = new User();
-            user.setUsername(empresa.getCorreo());
-            user.setPassword(dto.getPassword());
-            user.setEnable(true);
-            user.setIsAdmin(false);
-
-            // Usar directamente el servicio para guardar el usuario
-            User savedUser = service.addUser(user);
-
-            // Establecer relación y guardar empresa
-            empresa.setUser(savedUser);
-            Empresa nuevaEmpresa = service.addEmpresa(empresa);
+            Empresa nuevaEmpresa = service.addEmpresa(dto);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(nuevaEmpresa);
         } catch (Exception e) {
@@ -111,10 +119,10 @@ public class EmpresaController {
 
     // Update
     @PutMapping("/{id}")
-    public ResponseEntity<Empresa> updateEmpresa( @PathVariable("id") Integer id, @Valid @RequestBody Empresa empresa
+    public ResponseEntity<Empresa> updateEmpresa( @PathVariable("id") Integer id, @Valid @RequestBody EmpresaDTO empresaDTO
     ) {
         // Validar que el ID de la ruta coincida con el ID de la empresa
-        if (id == null || id <= 0 || !id.equals(empresa.getId())) {
+        if (id == null || id <= 0 || !id.equals(empresaDTO.getId())) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -124,7 +132,7 @@ public class EmpresaController {
         }
 
         try {
-            Empresa empresaActualizada = service.updateEmpresa(id, empresa);
+            Empresa empresaActualizada = service.updateEmpresa(id, empresaDTO);
             return ResponseEntity.ok(empresaActualizada);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

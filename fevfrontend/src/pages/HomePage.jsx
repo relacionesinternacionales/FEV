@@ -7,11 +7,14 @@ import LoginModal from "../components/LoginModal.jsx";
 import {useAuth} from '../context/AuthContext';
 import {useNavigate} from 'react-router-dom';
 import ToastMessageLogOut from "../components/ToastMessageLogOut.jsx";
+import ToastMessage from "../components/ToastMessage.jsx";
+import {useToast} from "../components/useToast.jsx";
 
 export const HomePage = () => {
     const [showLoginModal, setShowLoginModal] = useState(false);
     const {isAuthenticated} = useAuth();
     const navigate = useNavigate();
+    const {toast, closeToast} = useToast();
 
     const handleButtonClick = (url) => {
         // Comprobar si la URL es externa (comienza con http:// o https://)
@@ -31,6 +34,14 @@ export const HomePage = () => {
 
     const carouselItems = [
         {
+            image: "/assets/images/FEV.jpeg",
+            alt: "Feria Virtual de Empleo",
+            title: "Feria Virtual de Empleo",
+            description: "Explora ofertas laborales y conecta con empresas que buscan talento como el tuyo",
+            linkText1: "Ver Ofertas",
+            linkUrl1: "/ofertasHome"
+        },
+        {
             image: "/assets/images/Perfiles.png",
             alt: "Perfiles Laborales UNA",
             title: "Perfiles Laborales UNA",
@@ -39,20 +50,12 @@ export const HomePage = () => {
             linkUrl1: "https://perfileslaboralesuna.com/",
         },
         {
-            image: "/assets/images/FEV.jpeg",
-            alt: "Feria Virtual de Empleo",
-            title: "Feria Virtual de Empleo",
-            description: "Explora ofertas laborales y conecta con empresas que buscan talento como el tuyo",
-            linkText1: "Ver Ofertas",
-            linkUrl1: "/empleos"
-        },
-        {
             image: "/assets/images/Empresa.jpg",
             alt: "Empresas Ofertantes",
             title: "Empresas Ofertantes",
             description: "Ingreso al sistema de gestión para las empresas ofertantes",
             linkText1: "Registrarse",
-            linkUrl1: "/",
+            linkUrl1: "/empresa/create",
             linkText2: "Ingresar",
             linkUrl2: "/empresaHome",
         },
@@ -64,7 +67,7 @@ export const HomePage = () => {
 
     return (
         <>
-            <ToastMessageLogOut />
+            <ToastMessageLogOut/>
             <div>
                 <Carousel
                     items={carouselItems}
@@ -75,6 +78,13 @@ export const HomePage = () => {
                     handleClose={() => setShowLoginModal(false)}
                 />
             </div>
+
+            <ToastMessage
+                show={toast.show}
+                message={toast.message}
+                type={toast.type}
+                onClose={closeToast}
+            />
         </>
     );
 };

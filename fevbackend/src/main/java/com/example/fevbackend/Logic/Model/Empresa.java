@@ -28,9 +28,6 @@ public class Empresa {
     @Column(name = "correo", nullable = false, unique = true)
     private String correo;
 
-    @Column(name = "correo_postulantes")
-    private String correoPostulantes;
-
     @Column(name = "codigo_pais1", nullable = false, length = 5)
     private String codigoPais1;
 
@@ -43,14 +40,16 @@ public class Empresa {
     @Column(name = "telefono2", length = 15)
     private String telefono2;
 
-    @Column(name = "whatsapp", nullable = false, length = 15)
-    private String whatsapp;
-
     @Column(name = "web", nullable = false)
     private String web;
 
-    @Column(name = "logo")
-    private String logo;
+    @Lob
+    @Column(name = "imagen", columnDefinition = "LONGBLOB")
+    private byte[] imagen;
+
+    // Añade un campo para el tipo de imagen
+    @Column(name = "imagen_tipo")
+    private String imagenTipo;
 
     //------------------------------------------------------------------------------------------------------------------
     // Relacion
