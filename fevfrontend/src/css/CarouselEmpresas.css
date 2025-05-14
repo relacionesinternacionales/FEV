@@ -1,0 +1,157 @@
+/* Contenedor principal */
+.carousel-empresas-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Estilos para el Swiper principal */
+.main-swiper {
+    width: 100%;
+    min-height: 68vh;
+    border-radius: 8px;
+    overflow: hidden;
+    flex: 0.9;
+}
+
+.main-slide {
+    padding: 10px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Contenedor de detalles de la empresa */
+.company-details-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+/* Encabezado de la empresa con logo y título */
+.company-header {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eaeaea;
+    height: 100%;
+}
+
+/* Secciones de información */
+.company-info {
+    flex: 1;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.company-logo-container {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+}
+
+.company-logo {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.company-title {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #333;
+}
+
+
+
+.puesto-section {
+
+}
+
+.puesto-section h5 {
+    color: #444;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.puesto-section p {
+    color: #666;
+    line-height: 1.5;
+}
+
+/* Lista de vacantes */
+.vacancies-list {
+    margin-top: 10px;
+}
+
+.vacancy-item {
+    padding: 12px;
+    background-color: white;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.vacancy-item h6 {
+    margin: 0 0 5px 0;
+    color: #333;
+}
+
+.vacancy-item p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Estilos para el Swiper de miniaturas */
+.thumbs-swiper {
+    width: 100%;
+    max-height: 68vh;
+}
+
+.thumb-slide {
+    height: 100%;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+}
+
+.thumb-slide.swiper-slide-thumb-active {
+    opacity: 1;
+    border: #cb1719 solid 3px;
+    border-radius: 6px;
+}
+
+.thumb-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    background-color: white;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+/*
+.thumb-slide.swiper-slide-thumb-active .thumb-content {
+    background-color: rgba(220, 53, 69, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+*/
+.thumb-logo {
+    width: 100%;
+    object-fit: contain;
+}
+
+.thumb-title {
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+    max-width: 100%;
+}

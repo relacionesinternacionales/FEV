@@ -311,7 +311,7 @@ export const EmpresaCreatePage = ({mode}) => {
             //Actualizar Empresa
             if (id) {
                 try {
-                    const response = await EmpresaService.createEmpresa(id, empresaDTO);
+                    const response = await EmpresaService.updateEmpresa(id, empresaDTO);
                     console.log(response.data);
                     setToastForNextPage('Empresa editada correctamente');
                     navigate(`/empresa/view/${empresaId}`);

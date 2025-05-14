@@ -35,6 +35,15 @@ class EmpresaService {
 
     async createEmpresa(empresa) { return axios.post(`${EMPRESA_BASE_REST_API_URL}`, empresa)}
 
+    async getEmpresas() {
+        try{
+            const response = await axios.get(`${EMPRESA_BASE_REST_API_URL}`);
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            return [];
+        }
+    }
 }
 
 export default new EmpresaService();

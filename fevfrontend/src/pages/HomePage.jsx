@@ -39,7 +39,7 @@ export const HomePage = () => {
             title: "Feria Virtual de Empleo",
             description: "Explora ofertas laborales y conecta con empresas que buscan talento como el tuyo",
             linkText1: "Ver Ofertas",
-            linkUrl1: "/empleos"
+            linkUrl1: "/ofertasHome"
         },
         {
             image: "/assets/images/Perfiles.png",
