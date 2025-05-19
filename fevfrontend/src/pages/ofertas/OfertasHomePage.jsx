@@ -10,6 +10,7 @@ import {useToast} from "../../components/useToast.jsx";
 import EmpresaService from "../../services/EmpresaService.jsx";
 import {Swiper, SwiperSlide} from "swiper/react";
 import {FreeMode, Navigation, Thumbs} from 'swiper/modules';
+import Editor from "../../components/Editor.jsx";
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
@@ -92,8 +93,12 @@ export const OfertasHomePage = () => {
                                     <div className="d-flex flex-fill flex-row align-items-start">
                                         {/* Detalles */}
                                         <div className="company-info border border-warning me-1 p-2">
-                                            <div className="info-section">
-                                                <p className="text-start mx-2">{item.descripcion}</p>
+                                            <div className="info-section text-start mx-2">
+                                                <Editor
+                                                    isToolbar={false}
+                                                    value={item.descripcion}
+                                                    isDisabled={true}
+                                                />
                                             </div>
                                         </div>
 
@@ -111,12 +116,7 @@ export const OfertasHomePage = () => {
                                         {/* Aquí puedes agregar la lista de vacantes */}
                                         <div className="vacancies-list">
                                             <p>No hay vacantes disponibles actualmente.</p>
-                                            {/* Ejemplo de cómo mostrar vacantes:
-                    <div className="vacancy-item">
-                      <h6>Desarrollador Frontend</h6>
-                      <p>Experiencia con React y tecnologías modernas</p>
-                    </div>
-                    */}
+                                            {/* Ejemplo de cómo mostrar vacantes */}
                                         </div>
                                     </div>
                                 </div>
@@ -156,10 +156,9 @@ export const OfertasHomePage = () => {
                                             entidadId={item.id}
                                             imagen={item.imagen}
                                             className="thumb-logo"
-                                            style={{maxHeight: '250px'}}
+                                            style={{height: '100%'}}
                                             tipoEntidad="empresa"
                                         />
-                                        <p className="thumb-title">{item.nombre}</p>
                                     </div>
                                 </SwiperSlide>
                             )) : <SwiperSlide key="no-thumb-data" className="thumb-slide">
