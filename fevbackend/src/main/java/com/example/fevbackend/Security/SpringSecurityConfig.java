@@ -47,6 +47,7 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/empresa").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/empresa").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/empresa/{id}/imagen").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/puesto/empresaId/{id}").permitAll()
         //                .requestMatchers(HttpMethod.POST, "/api/v1/user").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
