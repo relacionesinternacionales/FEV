@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 
-const Editor = ({ value, onChange, isDisabled, error, isToolbar = true }) => {
+const Editor = ({ value, onChange, isDisabled, error, isToolbar = true}) => {
     // Referencias para el editor Quill
     const containerRef = useRef(null);
     const editorRef = useRef(null);

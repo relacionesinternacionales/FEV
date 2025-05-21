@@ -4,12 +4,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import '/src/css/style.css';
-import {useNavigate} from 'react-router-dom';
 import ToastMessage from "../../components/ToastMessage.jsx";
 import {useToast} from "../../components/useToast.jsx";
 import EmpresaService from "../../services/EmpresaService.jsx";
 import {Swiper, SwiperSlide} from "swiper/react";
-import {FreeMode, Navigation, Thumbs, Pagination} from 'swiper/modules';
+import {FreeMode, Mousewheel, Navigation, Pagination, Thumbs} from 'swiper/modules';
 import Editor from "../../components/Editor.jsx";
 import 'swiper/css';
 import 'swiper/css/free-mode';
@@ -18,12 +17,12 @@ import 'swiper/css/thumbs';
 import '/src/css/CarouselEmpresas.css';
 import Imagen from "../../components/Imagen.jsx";
 import PuestoService from "../../services/PuestoService.jsx";
+import PuestoModal from "../../components/PuestoModal.jsx";
 
 export const OfertasHomePage = () => {
     //------------------------------------------------------------------------------------------------------------------
     // Variables
     //------------------------------------------------------------------------------------------------------------------
-    const navigator = useNavigate();
     const {toast, closeToast} = useToast();
 
     const [empresas, setEmpresas] = useState([]);
@@ -37,9 +36,25 @@ export const OfertasHomePage = () => {
 
     const [selectedCompany, setSelectedCompany] = useState(null);
 
+    // NUEVO: Estado para el ID del puesto seleccionado y control del modal
+    const [selectedPuestoId, setSelectedPuestoId] = useState(null);
+    const [showPuestoModal, setShowPuestoModal] = useState(false);
+
     // Actualizar la empresa seleccionada cuando cambia el slide
     const handleSlideChange = (swiper) => {
         setSelectedCompany(empresas[swiper.activeIndex]);
+    };
+
+    // NUEVO: Función para abrir el modal con el ID del puesto
+    const abrirModalPuesto = (puestoId) => {
+        setSelectedPuestoId(puestoId);
+        setShowPuestoModal(true);
+    };
+
+    // NUEVO: Función para cerrar el modal
+    const cerrarModalPuesto = () => {
+        setShowPuestoModal(false);
+        setSelectedPuestoId(null);
     };
 
     // Función para cargar los puestos de una empresa
@@ -114,9 +129,10 @@ export const OfertasHomePage = () => {
                     <Swiper
                         className="main-swiper border border-danger border-3"
                         spaceBetween={10}
-                        navigation={true}
+                        //navigation={true}
+                        pagination={true}
                         thumbs={{swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null}}
-                        modules={[FreeMode, Navigation, Thumbs]}
+                        modules={[FreeMode, Navigation, Thumbs, Pagination]}
                         onSlideChange={handleSlideChange}
                     >
                         {empresas && empresas.length > 0 ? empresas.map((item, index) => (
@@ -184,10 +200,16 @@ export const OfertasHomePage = () => {
                                                 <p className="mt-2">Cargando puestos...</p>
                                             </div>
                                         ) : (
-                                            <Swiper navigation={true} modules={[Navigation]}
+                                            <Swiper navigation={true}
                                                     spaceBetween={10}
                                                     slidesPerView={3}
+                                                    pagination={{
+                                                        clickable: true,
+                                                    }}
+                                                    mousewheel={true}
+                                                    freeMode={true}
                                                     className="px-5"
+                                                    modules={[FreeMode, Navigation, Mousewheel, Pagination]}
                                             >
                                                 {puestos && puestos.length > 0 ? puestos.map((puesto, index) => (
                                                     <SwiperSlide key={`puestos-${index}`}
@@ -195,16 +217,21 @@ export const OfertasHomePage = () => {
                                                         <div
                                                             className="container border border-black border-2 rounded-2 d-flex flex-column p-3">
                                                             <h5 className="fw-bold">{puesto.nombre || 'Vacante'}</h5>
-                                                            <div className="flex-grow-1 overflow-hidden flex-grow-1 my-2" style={{height: "75px"}}>
-                                                                <p>{puesto.descripcion}</p>
+                                                            <div className="flex-grow-1  overflow-y-auto flex-grow-1 my-2 pb-1" style={{height: "100px"}}>
+                                                                <Editor
+                                                                    isToolbar={false}
+                                                                    value={puesto.descripcion}
+                                                                    isDisabled={true}
+                                                                />
                                                             </div>
                                                             <div className="mt-auto">
-                                                                <a href="#"
-                                                                   className="btn btn-primary btn-lg fw-bold p-2 px-3"
-                                                                   role="button"
+                                                                {/* MODIFICADO: Cambiar el enlace por botón con función */}
+                                                                <button
+                                                                    className="btn btn-primary btn-lg fw-bold p-2 px-3"
+                                                                    onClick={() => abrirModalPuesto(puesto.id)}
                                                                 >
                                                                     Información
-                                                                </a>
+                                                                </button>
                                                             </div>
                                                         </div>
                                                     </SwiperSlide>
@@ -238,12 +265,16 @@ export const OfertasHomePage = () => {
                     ) : (
                         <Swiper
                             onSwiper={setThumbsSwiper}
-                            spaceBetween={10}
-                            slidesPerView={3}
-                            freeMode={true}
                             direction={'vertical'}
+                            slidesPerView={3}
+                            spaceBetween={10}
+                            pagination={{
+                                clickable: true,
+                            }}
+                            mousewheel={true}
+                            freeMode={true}
                             watchSlidesProgress={true}
-                            modules={[FreeMode, Navigation, Thumbs]}
+                            modules={[FreeMode, Navigation, Thumbs, Mousewheel, Pagination]}
                             className="thumbs-swiper"
                         >
                             {empresas && empresas.length > 0 ? empresas.map((item, index) => (
@@ -267,6 +298,14 @@ export const OfertasHomePage = () => {
                     )}
                 </div>
             </div>
+
+            {/* Modal Puesto */}
+            <PuestoModal
+                show={showPuestoModal}
+                handleClose={cerrarModalPuesto}
+                puestoId={selectedPuestoId}
+                selectedCompany={selectedCompany}
+            />
 
             <ToastMessage
                 show={toast.show}

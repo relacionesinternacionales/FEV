@@ -67,12 +67,12 @@ public class PuestoController {
             return ResponseEntity.noContent().build();
         }
 
-        Puesto feria = service.getPuesto(id);
+        Puesto puesto = service.getPuesto(id);
 
-        //IF feria is not found
-        if(feria == null) { return ResponseEntity.noContent().build(); }
+        //IF puesto is not found
+        if(puesto == null) { return ResponseEntity.notFound().build(); }
 
-        return ResponseEntity.ok(feria);
+        return ResponseEntity.ok(puesto);
     }
 
     // Endpoint para obtener imagen directamente
