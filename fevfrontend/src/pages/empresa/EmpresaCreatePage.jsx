@@ -709,6 +709,7 @@ export const EmpresaCreatePage = ({mode}) => {
                                             </div>
                                             <div className="card-body">
                                                 <Editor
+                                                    isToolbar = {!isDisabled}
                                                     value={descripcion}
                                                     onChange={setDescripcion}
                                                     isDisabled={isDisabled || isLoading}
