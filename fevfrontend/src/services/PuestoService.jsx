@@ -14,6 +14,16 @@ class PuestoService {
         }
     }
 
+    async getPuestoById(id){
+        try {
+            const response = await axios.get(`${PUESTO_BASE_REST_API_URL}/${id}`);
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    }
+
     updatePuesto(id, puesto)
     {
         return axios.put(`${PUESTO_BASE_REST_API_URL}/${id}`, puesto);
